@@ -1,6 +1,6 @@
 # VRCFT-Babble Module
 
-[Project Babble](https://github.com/SummerSigh/ProjectBabble) Module for VRCFaceTracking v5. An open-source VR mouth tracking solution
+[Project Babble](https://github.com/SummerSigh/ProjectBabble) Module for [VRCFaceTracking v5](https://github.com/benaclejames/VRCFaceTracking). An open-source VR mouth tracking solution
 
 ![image](https://github.com/dfgHiatus/VRCFT-Babble/assets/51272212/90601f30-55a4-48af-a012-9cdb9bc47aa6)
 
