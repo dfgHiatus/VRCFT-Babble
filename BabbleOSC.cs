@@ -7,7 +7,7 @@ namespace VRCFaceTracking.Babble;
 public partial class BabbleOSC
 {
     private Socket _receiver;
-    public bool _loop = true;
+    private bool _loop = true;
     private readonly Thread _thread;
     private readonly ILogger _logger;
     private readonly int _resolvedPort;
