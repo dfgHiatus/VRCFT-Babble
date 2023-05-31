@@ -19,10 +19,10 @@ public class BabbleVRC : ExtTrackingModule
         streams.Add(hmdStream);
         ModuleInformation = new ModuleMetadata()
         {
-            Name = "Project Babble Face Tracking\nInference Model v2.0.0"
+            Name = "Project Babble Face Tracking\nInference Model v2.0.0",
+            StaticImages = streams
         };
 
-        ModuleInformation.StaticImages = streams;
         return (false, true);
     }
 
