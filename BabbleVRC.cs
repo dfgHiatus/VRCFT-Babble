@@ -34,7 +34,7 @@ public class BabbleVRC : ExtTrackingModule
         UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.JawOpen].Weight = babbleOSC.BabbleExpressionMap["/jawOpen"];
         UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.JawLeft].Weight = -babbleOSC.BabbleExpressionMap["/jawLeft"];
         UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.JawRight].Weight = -babbleOSC.BabbleExpressionMap["/jawRight"];
-        UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.JawForward].Weight = babbleOSC.BabbleExpressionMap["/jawOpen"];
+        UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.JawForward].Weight = babbleOSC.BabbleExpressionMap["/jawForward"];
 
         UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.NoseSneerLeft].Weight = -babbleOSC.BabbleExpressionMap["/noseSneerLeft"];
         UnifiedTracking.Data.Shapes[(int)UnifiedExpressions.NoseSneerRight].Weight = -babbleOSC.BabbleExpressionMap["/noseSneerRight"];
