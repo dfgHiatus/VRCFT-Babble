@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using VRCFaceTracking.Core.OSC;
 
 namespace VRCFaceTracking.Babble;
@@ -34,9 +35,102 @@ public partial class BabbleOSC
         _thread.Start();
     }
 
+    struct Msg
+    {
+        public string address;
+        public float value;
+        public bool success;
+    }
+
+    // https://github.com/benaclejames/SimpleRustOSC/blob/master/src/lib.rs#L54
+    private Msg ParseOSC(byte[] buffer, int length)
+    {
+        Msg msg = new Msg();
+        msg.success = false;
+
+        if (length < 4)
+            return msg;
+
+        int bufferPosition = 0;
+        string address = ParseString(buffer, length, ref bufferPosition);
+        if (address == "")
+            return msg;
+
+        msg.address = address;
+
+        // checking for ',' char
+        if (buffer[bufferPosition] != 44)
+            return msg;
+        bufferPosition++; // skipping ',' character
+
+        char valueType = (char)buffer[bufferPosition]; // unused
+        bufferPosition++;
+
+        float value = ParesFloat(buffer, length, bufferPosition);
+
+        msg.value = value;
+        msg.success = true;
+
+        return msg;
+    }
+
+    private string ParseString(byte[] buffer, int length, ref int bufferPosition)
+    {
+        string address = "";
+
+        // first character must be '/'
+        if (buffer[0] != 47)
+            return address;
+
+        for (int i = 0; i < length; i++)
+        {
+            if (buffer[i] == 0)
+            {
+                bufferPosition = i + 1;
+
+                if (bufferPosition % 4 != 0)
+                {
+                    bufferPosition += 4 - (bufferPosition % 4);
+                }
+
+                break;
+            }
+
+            address += (char)buffer[i];
+        }
+
+        return address;
+    }
+
+    private float ParesFloat(byte[] buffer, int length, int bufferPosition)
+    {
+        var valueBuffer = new byte[length - bufferPosition];
+
+        int j = 0;
+        for (int i = bufferPosition; i < length; i++)
+        {
+            valueBuffer[j] = buffer[i];
+
+            j++;
+        }
+
+        float value = bytesToFLoat(valueBuffer);
+        return value;
+    }
+
+    private float bytesToFLoat(byte[] bytes)
+    {
+        if (BitConverter.IsLittleEndian)
+        {
+            Array.Reverse(bytes); // Convert big endian to little endian
+        }
+
+        float myFloat = BitConverter.ToSingle(bytes, 0);
+        return myFloat;
+    }
+
     private void ListenLoop()
     {
-        OscMessageMeta oscMeta = new OscMessageMeta();
         var buffer = new byte[4096];
 
         while (_loop)
@@ -46,15 +140,11 @@ public partial class BabbleOSC
                 if (_receiver.IsBound)
                 {
                     var length = _receiver.Receive(buffer);
-                    if (SROSCLib.parse_osc(buffer, length, ref oscMeta))
+
+                    Msg msg = ParseOSC(buffer, length);
+                    if (msg.success && BabbleExpressionMap.ContainsKey(msg.address))
                     {
-                        if (BabbleExpressionMap.ContainsKey(oscMeta.Address))
-                        {
-                            if (oscMeta.Type == OscValueType.Float) // Possibly redundant
-                            {
-                                BabbleExpressionMap[oscMeta.Address] = oscMeta.Value.FloatValues[0];
-                            }
-                        }
+                        BabbleExpressionMap[msg.address] = msg.value;
                     }
                 }
                 else
