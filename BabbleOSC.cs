@@ -1,11 +1,10 @@
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using VRCFaceTracking.Core.OSC;
 
 namespace VRCFaceTracking.Babble;
-public partial class BabbleOSC
+
+public class BabbleOSC
 {
     private Socket _receiver;
     private bool _loop = true;
@@ -142,9 +141,9 @@ public partial class BabbleOSC
                     var length = _receiver.Receive(buffer);
 
                     Msg msg = ParseOSC(buffer, length);
-                    if (msg.success && BabbleExpressionMap.ContainsKey(msg.address))
+                    if (msg.success && BabbleExpressions.BabbleExpressionMap.ContainsKey2(msg.address))
                     {
-                        BabbleExpressionMap[msg.address] = msg.value;
+                        BabbleExpressions.BabbleExpressionMap.SetByKey2(msg.address, msg.value);
                     }
                 }
                 else
