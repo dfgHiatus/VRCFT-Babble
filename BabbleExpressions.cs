@@ -3,13 +3,16 @@ public partial class BabbleOSC
 {
     public Dictionary<string, float> BabbleExpressionMap = new()
     {
-        { "/cheekPuff", 0f },
-        { "/noseSneerLeft", 0f },
-        { "/noseSneerRight", 0f },
+        { "/cheekPuffLeft", 0f },
+        { "/cheekPuffRight", 0f },
+        { "/cheekSuckLeft", 0f },
+        { "/cheekSuckRight", 0f },
         { "/jawOpen", 0f },
         { "/jawForward", 0f },
         { "/jawLeft", 0f },
         { "/jawRight", 0f },
+        { "/noseSneerLeft", 0f },
+        { "/noseSnerrRight", 0f },
         { "/mouthFunnel", 0f },
         { "/mouthPucker", 0f },
         { "/mouthLeft", 0f },
@@ -34,5 +37,16 @@ public partial class BabbleOSC
         { "/mouthStretchLeft", 0f },
         { "/mouthStretchRight", 0f },
         { "/tongueOut", 0f },
+        { "/tongueUp", 0f },
+        { "/tongueDown", 0f },
+        { "/tongueLeft", 0f },
+        { "/tongueRight", 0f },
+        { "/tongueRoll", 0f },
+        { "/tongueBendDown", 0f },
+        { "/tongueCurlUp", 0f },
+        { "/tongueSquish", 0f },
+        { "/tongueFlat", 0f },
+        { "/tongueTwistLeft", 0f },
+        { "/tognueTwistRight", 0f }
     };
 }

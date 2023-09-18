@@ -13,11 +13,6 @@
   <ItemGroup>
     <EmbeddedResource Include="BabbleLogo.png" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\VRCFaceTracking.Core\VRCFaceTracking.Core.csproj" />
-    <ProjectReference Include="..\VRCFaceTracking\VRCFaceTracking.csproj" />
-  </ItemGroup>
   
 
 </Project>
