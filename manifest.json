@@ -3,8 +3,8 @@
  "AuthorName": "dfgHiatus",
  "DllFileName": "",
  "Downloads": 0,
- "DownloadUrl": "https://github.com/dfgHiatus/VRCFT-Babble/releases/download/v2.0.5/VRCFaceTracking.Babble.zip",
- "LastUpdated": "2024-04-22T01:08:01Z",
+ "DownloadUrl": "https://github.com/dfgHiatus/VRCFT-Babble/releases/download/v2.0.7/VRCFaceTracking.Babble.zip",
+ "LastUpdated": "2024-04-24T01:08:01Z",
  "ModuleDescription": "Project Babble face tracking for VRCFaceTracking v5.",
  "ModuleName": "VRCFaceTracking.Babble",
  "ModulePageUrl": "https://github.com/dfgHiatus/VRCFT-Babble", 
@@ -12,5 +12,5 @@
  "Ratings": 0,
  "RatingSum": 0,
  "UsageInstructions": "For complete instructions, please refer to the project page.",
- "Version": "2.0.5" 
+ "Version": "2.0.7" 
 }
