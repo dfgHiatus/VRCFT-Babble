@@ -20,7 +20,7 @@ public class BabbleVRC : ExtTrackingModule
         streams.Add(hmdStream!);
         ModuleInformation = new ModuleMetadata()
         {
-            Name = "Project Babble Face Tracking\nInference Model v2.0.0",
+            Name = "Project Babble Face Tracking\nInference Model v2.0.7",
             StaticImages = streams
         };
 
@@ -28,11 +28,13 @@ public class BabbleVRC : ExtTrackingModule
     }
 
     public override void Teardown() => babbleOSC.Teardown();
+    
     public override void Update()
     {
         foreach (var unifiedExpression in BabbleExpressions.BabbleExpressionMap)
         {
             UnifiedTracking.Data.Shapes[(int) unifiedExpression].Weight = BabbleExpressions.BabbleExpressionMap.GetByKey1 (unifiedExpression);
         }
+        Thread.Sleep(10)'
     }
 }
