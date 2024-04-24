@@ -6,28 +6,28 @@ using VRCFaceTracking.Babble.Collections;
 namespace VRCFaceTracking.Babble;
 public static class BabbleExpressions
 {
-    private const string BabbleExpressionsPath = "BabbleExpressions.json";
+    // private const string BabbleExpressionsPath = "BabbleExpressions.json";
 
-    public static readonly TwoKeyDictionary<UnifiedExpressions, string, float> BabbleExpressionMap;
-    static BabbleExpressions()
-    {
-        var expressions = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, 
-            BabbleExpressionsPath);
-        var converter = new TwoKeyDictionaryConverter<UnifiedExpressions, string, float>();
-        if (!File.Exists(expressions))
-        {
-            string json = JsonConvert.SerializeObject(
-                DefaultBabbleExpressionMap, converter);
-            File.WriteAllText(expressions, json);
-        }
+    // public static readonly TwoKeyDictionary<UnifiedExpressions, string, float> BabbleExpressionMap;
+    // static BabbleExpressions()
+    // {
+    //     var expressions = Path.Combine(
+    //         Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, 
+    //         BabbleExpressionsPath);
+    //     var converter = new TwoKeyDictionaryConverter<UnifiedExpressions, string, float>();
+    //     if (!File.Exists(expressions))
+    //     {
+    //         string json = JsonConvert.SerializeObject(
+    //             DefaultBabbleExpressionMap, converter);
+    //         File.WriteAllText(expressions, json);
+    //     }
 
-        BabbleExpressionMap = JsonConvert.DeserializeObject
-            <TwoKeyDictionary<UnifiedExpressions, string, float>>
-            (File.ReadAllText(expressions), converter)!;
-    }
+    //     BabbleExpressionMap = JsonConvert.DeserializeObject
+    //         <TwoKeyDictionary<UnifiedExpressions, string, float>>
+    //         (File.ReadAllText(expressions), converter)!;
+    // }
 
-    private static readonly TwoKeyDictionary<UnifiedExpressions, string, float> DefaultBabbleExpressionMap = new()
+    private static readonly TwoKeyDictionary<UnifiedExpressions, string, float> BabbleExpressionMap = new()
     {
         { UnifiedExpressions.CheekPuffLeft, "/cheekPuffLeft", 0f },
         { UnifiedExpressions.CheekPuffRight, "/cheekPuffRight", 0f },
