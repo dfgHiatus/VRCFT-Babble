@@ -18,6 +18,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
 {
     private Dictionary<TKey1, TKey2> m_dic1 = new Dictionary<TKey1, TKey2>();
     private Dictionary<TKey2, TValue> m_dic2 = new Dictionary<TKey2, TValue>();
+    private IEnumerator<TKey1> m_cachedEnumerator;
 
     /// <summary>
     ///   Adds the specified key and value to the dictionary.
@@ -36,7 +37,8 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
 
         m_dic1[key1] = key2;
         m_dic2[key2] = value;
-
+        CacheEnumerator();
+        
         return true;
     }
 
@@ -57,6 +59,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
 
         m_dic1[key1] = key2;
         m_dic2[key2] = value;
+        CacheEnumerator();
         return true;
     }
 
@@ -74,6 +77,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
         }
 
         m_dic2[m_dic1[key1]] = value;
+        CacheEnumerator();
         return true;
     }
 
@@ -168,6 +172,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
 
         m_dic1.Remove(key1);
         m_dic2.Remove(tmp_key2);
+        CacheEnumerator();
         return true;
     }
 
@@ -185,6 +190,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
         TKey1 tmp_key1 = m_dic1.First((kvp) => kvp.Value.Equals(key2)).Key;
         m_dic1.Remove(tmp_key1);
         m_dic2.Remove(key2);
+        CacheEnumerator();
         return true;
     }
 
@@ -245,6 +251,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
     {
         m_dic1.Clear();
         m_dic2.Clear();
+        CacheEnumerator();
     }
 
     public override string ToString()
@@ -261,13 +268,16 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
 
     public IEnumerable<TKey2> InnerKeys => m_dic2.Keys;
 
-    public IEnumerator<TKey1> GetEnumerator()
+    private void CacheEnumerator()
     {
-        return m_dic1.Keys.GetEnumerator();
+        m_cachedEnumerator = m_dic1.Keys.GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    public IEnumerator<TKey1> GetEnumerator()
     {
-        return GetEnumerator();
+        m_cachedEnumerator.Reset();
+        return m_cachedEnumerator;
     }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
