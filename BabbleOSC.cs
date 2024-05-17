@@ -18,12 +18,14 @@ public class BabbleOSC
 	private readonly ILogger _logger;
 
 	private readonly int _resolvedPort;
+	private readonly string _resolvedHost;
 
+	private const string DEFAULT_HOST = "127.0.0.1";
 	private const int DEFAULT_PORT = 8888;
 
 	private const int TIMEOUT_MS = 10000;
 
-	public BabbleOSC(ILogger iLogger, int? port = null)
+	public BabbleOSC(ILogger iLogger, int? port = null, string? host = null)
 	{
 		_logger = iLogger;
 		if (_receiver != null)
@@ -31,13 +33,25 @@ public class BabbleOSC
 			_logger.LogError("BabbleOSC connection already exists.");
 			return;
 		}
-		_receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+		_resolvedHost = host ?? DEFAULT_HOST;
 		_resolvedPort = port ?? DEFAULT_PORT;
-		_receiver.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), _resolvedPort));
-		_receiver.ReceiveTimeout = TIMEOUT_MS;
+
+		ConfigureReceiver();
+
 		_loop = true;
 		_thread = new Thread(ListenLoop);
 		_thread.Start();
+	}
+
+	private void ConfigureReceiver()
+	{
+		var ipAddress = IPAddress.Parse(_resolvedHost);
+		var ipEndPoint = new IPEndPoint(ipAddress, _resolvedPort);
+			
+		_receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+		_receiver.Bind(ipEndPoint);
+		_receiver.ReceiveTimeout = TIMEOUT_MS;
 	}
 
 	private void ListenLoop()
@@ -76,9 +90,7 @@ public class BabbleOSC
 				{
 					_receiver.Close();
 					_receiver.Dispose();
-					_receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-					_receiver.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), _resolvedPort));
-					_receiver.ReceiveTimeout = TIMEOUT_MS;
+					ConfigureReceiver();
 				}
 			}
 			catch (Exception)
