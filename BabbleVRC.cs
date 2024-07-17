@@ -1,8 +1,8 @@
 using System.Reflection;
-using VRCFaceTracking.Core.Params.Data;
 using VRCFaceTracking.Core.Params.Expressions;
 
 namespace VRCFaceTracking.Babble;
+
 public class BabbleVRC : ExtTrackingModule
 {
     private BabbleOSC babbleOSC;
@@ -11,30 +11,31 @@ public class BabbleVRC : ExtTrackingModule
 
     public override (bool eyeSuccess, bool expressionSuccess) Initialize(bool eyeAvailable, bool expressionAvailable)
     {
-        babbleOSC = new BabbleOSC(Logger);
-
-        List<Stream> streams = new List<Stream>();
-        Assembly a = Assembly.GetExecutingAssembly();
-        var hmdStream = a.GetManifestResourceStream
-            ("VRCFaceTracking.Babble.BabbleLogo.png");
-        streams.Add(hmdStream!);
-        ModuleInformation = new ModuleMetadata()
+        Config babbleConfig = BabbleConfig.GetBabbleConfig();
+        babbleOSC = new BabbleOSC(Logger, babbleConfig.Host, babbleConfig.Port);
+        List<Stream> list = new List<Stream>();
+        Assembly executingAssembly = Assembly.GetExecutingAssembly();
+        Stream manifestResourceStream = executingAssembly.GetManifestResourceStream("VRCFaceTracking.Babble.BabbleLogo.png")!;
+        list.Add(manifestResourceStream);
+        ModuleInformation = new ModuleMetadata
         {
-            Name = "Project Babble Face Tracking\nInference Model v2.0.7",
-            StaticImages = streams
+            Name = "Project Babble Face Tracking\nInference Model v2.1.1",
+            StaticImages = list
         };
-
         return (false, true);
     }
 
-    public override void Teardown() => babbleOSC.Teardown();
-    
+    public override void Teardown()
+    {
+        babbleOSC.Teardown();
+    }
+
     public override void Update()
     {
-        foreach (var unifiedExpression in BabbleExpressions.BabbleExpressionMap)
+        foreach (UnifiedExpressions expression in BabbleExpressions.BabbleExpressionMap)
         {
-            UnifiedTracking.Data.Shapes[(int) unifiedExpression].Weight = BabbleExpressions.BabbleExpressionMap.GetByKey1 (unifiedExpression);
+            UnifiedTracking.Data.Shapes[(int)expression].Weight = BabbleExpressions.BabbleExpressionMap.GetByKey1(expression);
         }
-        Thread.Sleep(10)'
+        Thread.Sleep(10);
     }
 }
