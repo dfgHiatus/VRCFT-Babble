@@ -9,8 +9,8 @@ public static class BabbleConfig
 
 	public static Config GetBabbleConfig()
 	{
-		string directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-		string path = Path.Combine(directoryName, "BabbleConfig.json");
+        string directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+		string path = Path.Combine(directoryName, BabbleConfigFile);
 		string value = File.ReadAllText(path);
 		return JsonConvert.DeserializeObject<Config>(value)!;
 	}
