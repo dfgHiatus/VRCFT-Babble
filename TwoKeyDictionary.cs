@@ -18,7 +18,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
 {
     private Dictionary<TKey1, TKey2> m_dic1 = new Dictionary<TKey1, TKey2>();
     private Dictionary<TKey2, TValue> m_dic2 = new Dictionary<TKey2, TValue>();
-    private IEnumerator<TKey1> m_cachedEnumerator;
+    private IEnumerator<TKey1> m_cachedEnumerator = null!;
 
     /// <summary>
     ///   Adds the specified key and value to the dictionary.
@@ -128,13 +128,13 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
     {
         if (!ContainsKey1(key1))
         {
-            value = default(TValue);
+            value = default!;
             return false;
         }
 
         if (!ContainsKey2(m_dic1[key1]))
         {
-            value = default(TValue);
+            value = default!;
             return false;
         }
 
@@ -151,7 +151,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
     {
         if (!ContainsKey2(key2))
         {
-            value = default(TValue);
+            value = default!;
             return false;
         }
 
@@ -165,7 +165,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
     /// <param name="key1"></param>
     public bool RemoveByKey1(TKey1 key1)
     {
-        if (!m_dic1.TryGetValue(key1, out TKey2 tmp_key2))
+        if (!m_dic1.TryGetValue(key1, out var tmp_key2))
         {
             return false;
         }
@@ -187,7 +187,7 @@ public class TwoKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
             return false;
         }
 
-        TKey1 tmp_key1 = m_dic1.First((kvp) => kvp.Value.Equals(key2)).Key;
+        TKey1 tmp_key1 = m_dic1.First((kvp) => kvp.Value!.Equals(key2)).Key;
         m_dic1.Remove(tmp_key1);
         m_dic2.Remove(key2);
         CacheEnumerator();

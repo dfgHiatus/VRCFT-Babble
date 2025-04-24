@@ -12,14 +12,14 @@ public class BabbleVRC : ExtTrackingModule
     public override (bool eyeSuccess, bool expressionSuccess) Initialize(bool eyeAvailable, bool expressionAvailable)
     {
         Config babbleConfig = BabbleConfig.GetBabbleConfig();
-        babbleOSC = new BabbleOSC(Logger, babbleConfig.Host, babbleConfig.Port);
+        babbleOSC = new BabbleOSC(logger: Logger, babbleConfig.Host, babbleConfig.Port);
         List<Stream> list = new List<Stream>();
         Assembly executingAssembly = Assembly.GetExecutingAssembly();
         Stream manifestResourceStream = executingAssembly.GetManifestResourceStream("VRCFaceTracking.Babble.BabbleLogo.png")!;
         list.Add(manifestResourceStream);
         ModuleInformation = new ModuleMetadata
         {
-            Name = "Project Babble Face Tracking\nInference Model v2.1.1",
+            Name = "Project Babble Module v2.1.2",
             StaticImages = list
         };
         return (false, true);
